@@ -13,3 +13,5 @@ add_subdirectory("labs/lab02")
 add_subdirectory("labs/lab02/exercises")
 
 add_subdirectory("labs/lab03")
+
+add_subdirectory("assessment")
