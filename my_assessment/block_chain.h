@@ -13,11 +13,13 @@ private:
     // Data stored in the block.
     std::string _data;
     // Hash code of this block.
-    std::string _hash = "";
+    std::string _hash;
     // Time code block was created.
     long _time;
 
-    void calculate_hash(std::string &current_hash) noexcept;
+	bool found = false;
+
+    void calculate_hash() noexcept;
 
 public:
     block(uint32_t index, const std::string &data);

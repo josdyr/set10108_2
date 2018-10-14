@@ -25,28 +25,16 @@ void block::mine_block(uint32_t difficulty) noexcept {
 
     auto start = system_clock::now();
 
-	while (_hash.substr(0, difficulty) != str) {
-        //++_nonce;
-        /*_hash = calculate_hash();*/
+	auto num_threads = thread::hardware_concurrency();
+	vector<thread> threads;
 
-		
+	for (unsigned int i = 0; i < num_threads; ++i) {
+		threads.push_back(thread(&block::calculate_hash, this));
+	}
 
-		string current_hash ="";
-
-		// Create a shared int value
-		/*auto value = make_shared<int>(0);*/
-
-		// Create number of threads hardware natively supports
-		auto num_threads = thread::hardware_concurrency();
-		vector<thread> threads;
-		for (unsigned int i = 0; i < num_threads; ++i)
-			threads.push_back(thread(&block::calculate_hash, this, current_hash));
-
-		// Join the threads
-		for (auto &t : threads)
-			t.join();
-
-    }
+	for (auto &t : threads) {
+		t.join();
+	}
 
     auto end = system_clock::now();
     duration<double> diff = end - start;
@@ -54,17 +42,19 @@ void block::mine_block(uint32_t difficulty) noexcept {
     cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << "\n" << endl;
 }
 
-void block::calculate_hash(string &current_hash) noexcept {
-	//++_nonce;
-	//cout << _nonce << endl;
+void block::calculate_hash() noexcept {
 
-    stringstream ss;
-    ss << _index << _time << _data << ++_nonce << prev_hash;
-	string _current_hash = sha256(ss.str());
-	//cout << _current_hash << endl;
-	if (_current_hash.substr(0, 3) == "000") {
-		current_hash = _current_hash;
-		cout << "_nonce: " << _nonce << endl;
+	while (!found)
+	{
+		stringstream ss;
+		ss << _index << _time << _data << ++_nonce << prev_hash;
+
+		string _current_hash = sha256(ss.str());
+		if (_current_hash.substr(0, 3) == "000") {
+			found = true;
+			_hash = _current_hash;
+			cout << "_nonce: " << _nonce << "\t _current_hash: " << _current_hash << endl;
+		}
 	}
 }
 

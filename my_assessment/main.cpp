@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "block_chain.h"
+#include <thread>
 
 using namespace std;
 
@@ -13,5 +14,6 @@ int main()
         cout << "Mining block " << i << "..." << endl;
         bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")));
     }
+
     return 0;
 }
