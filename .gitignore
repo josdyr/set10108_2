@@ -3,6 +3,7 @@
 
 # folder
 .vs
+binary/
 
 # Compiled Object files
 *.slo
