@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <atomic>
 
 class block
 {
@@ -19,7 +20,7 @@ private:
 
 	bool found = false;
 
-    void calculate_hash() noexcept;
+    void calculate_hash(uint32_t difficulty) noexcept;
 
 public:
     block(uint32_t index, const std::string &data);

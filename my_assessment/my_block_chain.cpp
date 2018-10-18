@@ -21,7 +21,6 @@ block::block(uint32_t index, const string &data)
 }
 
 void block::mine_block(uint32_t difficulty) noexcept {
-    string str(difficulty, '0');
 
     auto start = system_clock::now();
 
@@ -29,7 +28,7 @@ void block::mine_block(uint32_t difficulty) noexcept {
 	vector<thread> threads;
 
 	for (unsigned int i = 0; i < num_threads; ++i) {
-		threads.push_back(thread(&block::calculate_hash, this));
+		threads.push_back(thread(&block::calculate_hash, this, difficulty));
 	}
 
 	for (auto &t : threads) {
@@ -42,7 +41,9 @@ void block::mine_block(uint32_t difficulty) noexcept {
     cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << "\n" << endl;
 }
 
-void block::calculate_hash() noexcept {
+void block::calculate_hash(uint32_t difficulty) noexcept {
+
+	string str(difficulty, '0');
 
 	while (!found)
 	{
@@ -50,7 +51,7 @@ void block::calculate_hash() noexcept {
 		ss << _index << _time << _data << ++_nonce << prev_hash;
 
 		string _current_hash = sha256(ss.str());
-		if (_current_hash.substr(0, 3) == "000") {
+		if (_current_hash.substr(0, difficulty) == str) {
 			found = true;
 			_hash = _current_hash;
 			cout << "_nonce: " << _nonce << "\t _current_hash: " << _current_hash << endl;
