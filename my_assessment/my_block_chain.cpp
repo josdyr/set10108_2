@@ -8,6 +8,8 @@
 #include <string>
 #include <future>
 #include <vector>
+#include <fstream>
+#include "assert.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -39,6 +41,11 @@ void block::mine_block(uint32_t difficulty) noexcept {
     duration<double> diff = end - start;
 
     cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << "\n" << endl;
+	
+	ofstream myfile;
+	myfile.open("data.csv", ios::app);
+	myfile << _hash << "," << diff.count() << endl;
+	myfile.close();
 }
 
 void block::calculate_hash(uint32_t difficulty) noexcept {
