@@ -14,6 +14,10 @@ add_subdirectory("labs/lab02/exercises")
 
 add_subdirectory("labs/lab03")
 
+add_subdirectory("labs/lab04")
+
+add_subdirectory("labs/lab05")
+
 add_subdirectory("assessment")
 add_subdirectory("my_assessment")
 add_subdirectory("my_assessment_openMP")
