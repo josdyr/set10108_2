@@ -3,6 +3,8 @@
 #include <cstring>
 #include <fstream>
 
+#include <iostream>
+
 using namespace std;
 
 const uint32_t SHA256::sha256_k[64] =
@@ -152,6 +154,7 @@ void SHA256::final(unsigned char *digest)
 
 std::string sha256(const std::string &input)
 {
+	cout << input << endl;
     unsigned char digest[SHA256::DIGEST_SIZE];
     memset(digest, 0, SHA256::DIGEST_SIZE);
     SHA256 ctx = SHA256();

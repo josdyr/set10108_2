@@ -16,3 +16,7 @@ add_subdirectory("labs/lab03")
 
 add_subdirectory("assessment")
 add_subdirectory("my_assessment")
+add_subdirectory("my_assessment_openMP")
+add_subdirectory("my_assessment_atomic")
+add_subdirectory("my_assessment_mut_lock")
+add_subdirectory("my_assessment_futures")

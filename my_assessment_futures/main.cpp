@@ -7,19 +7,19 @@
 using namespace std;
 using namespace chrono;
 
-int const ITERATIONS = 400u; //iterations or nr of blocks
-int const DIFFICULTIES_TO_TEST = 2; //testing all difficulties, up to and including
+int const ITERATIONS = 20u; //iterations or nr of blocks
+int const DIFFICULTIES_TO_TEST = 4; //testing all difficulties, up to and including
 
 int main()
 {
 	// Create log file/report
-	ofstream data("data.csv", ofstream::app);
+	ofstream data("../my_assessment/data.csv", ofstream::app);
 
-	for (size_t current_difficulty = 2; current_difficulty <= DIFFICULTIES_TO_TEST; current_difficulty++)
+	for (size_t current_difficulty = 1; current_difficulty <= DIFFICULTIES_TO_TEST; current_difficulty++)
 	{
 		//write the difficulty level to the file
-		cout << "mt: " << "diff_" << current_difficulty << ", iterations_" << ITERATIONS;
-		data << "mt," << current_difficulty << "," << ITERATIONS;
+		cout << "omp: " << "diff_" << current_difficulty << ", iterations_" << ITERATIONS;
+		//data << "omp," << current_difficulty << "," << ITERATIONS;
 
 		// create a block_chain for each difficulty level (1 - 6)
 		block_chain bchain;
@@ -27,9 +27,10 @@ int main()
 		//cout << "bchain.get_difficulty(): " << bchain.get_difficulty() << endl;
 
 		auto start = system_clock::now();
-		for (uint32_t i = 0; i <= ITERATIONS; ++i)
+		for (uint32_t i = 0; i < ITERATIONS; ++i)
 		{
-			cout << "Mining block " << i << "..." << endl;
+			//cout << "Mining block " << i << "..." << endl;
+			cout << i << ": ";
 			bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")));
 		}
 		auto end = system_clock::now();
@@ -37,7 +38,7 @@ int main()
 		cout << "time of " << ITERATIONS << " iterations: " << diff.count() << endl;
 
 		//write the time to data
-		data << "," << diff.count();
+		//data << "," << diff.count();
 
 		data << endl;
 	}

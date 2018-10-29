@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <atomic>
 
 class block
 {
@@ -9,7 +10,8 @@ private:
     // The index of the block in the chain.
     uint32_t _index;
     // A modifier used to get a suitable block.
-    uint64_t _nonce;
+    //uint64_t _nonce;
+	std::shared_ptr<std::atomic<uint64_t>> _nonce;
     // Data stored in the block.
     std::string _data;
     // Hash code of this block.
@@ -17,7 +19,9 @@ private:
     // Time code block was created.
     long _time;
 
-    std::string calculate_hash() const noexcept;
+	bool found = false;
+
+    string calculate_hash() noexcept;
 
 public:
     block(uint32_t index, const std::string &data);

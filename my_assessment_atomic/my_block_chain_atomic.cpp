@@ -19,12 +19,12 @@ using namespace std::chrono;
 // from parallelisation we will just use the index value, so time increments
 // by one each time: 1, 2, 3, etc.
 block::block(uint32_t index, const string &data)
-: _index(index), _data(data), _nonce(0), _time(static_cast<long>(index)) {
+: _index(index), _data(data), _nonce(std::make_shared<atomic<uint64_t>>(0)), _time(static_cast<long>(index)) {
 }
 
 void block::mine_block(uint32_t difficulty) noexcept {
 
-	ofstream data("sample2.csv", ofstream::app);
+	//ofstream data("sample2.csv", ofstream::app);
 
 	auto num_threads = thread::hardware_concurrency();
 
@@ -40,7 +40,7 @@ void block::mine_block(uint32_t difficulty) noexcept {
     duration<double> diff = end - start;
 
 	//data << _hash << "," << diff.count();
-	data << _hash << endl;
+	//data << _hash << endl;
 
     cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << "\n" << endl;
 	
@@ -51,13 +51,12 @@ void block::calculate_hash(uint32_t difficulty) noexcept {
 	while (!found)
 	{
 		stringstream ss;
-		ss << _index << _time << _data << ++_nonce << prev_hash;
-		cout << _nonce << endl;
+		ss << _index << _time << _data << ++*(_nonce) << prev_hash;
 		string _current_hash = sha256(ss.str());
 		if (_current_hash.substr(0, difficulty) == str) {
 			found = true;
 			_hash = _current_hash;
-			cout << "_nonce: " << _nonce << "\t _current_hash: " << _current_hash << endl;
+			cout << "_nonce: " << *_nonce << "\t _current_hash: " << _current_hash << endl;
 		}
 	}
 }

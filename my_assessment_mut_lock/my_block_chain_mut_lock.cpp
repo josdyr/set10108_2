@@ -9,6 +9,7 @@
 #include <future>
 #include <vector>
 #include <fstream>
+#include <mutex>
 #include "assert.h"
 
 using namespace std;
@@ -24,7 +25,7 @@ block::block(uint32_t index, const string &data)
 
 void block::mine_block(uint32_t difficulty) noexcept {
 
-	ofstream data("sample2.csv", ofstream::app);
+	ofstream data("../my_assessment/sample.csv", ofstream::app);
 
 	auto num_threads = thread::hardware_concurrency();
 
@@ -46,14 +47,17 @@ void block::mine_block(uint32_t difficulty) noexcept {
 	
 }
 
+mutex mut;
+
 void block::calculate_hash(uint32_t difficulty) noexcept {
 	string str(difficulty, '0');
 	while (!found)
 	{
 		stringstream ss;
+		mut.lock();
 		ss << _index << _time << _data << ++_nonce << prev_hash;
-		cout << _nonce << endl;
 		string _current_hash = sha256(ss.str());
+		mut.unlock();
 		if (_current_hash.substr(0, difficulty) == str) {
 			found = true;
 			_hash = _current_hash;
