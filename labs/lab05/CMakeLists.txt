@@ -7,6 +7,6 @@ link_libraries(${MPI_LIBRARIES})
 
 add_executable(hello-mpi hello-mpi.cpp)
 add_executable(send-receive send-receive.cpp)
-add_executable(monte-carlo-pi monte-carlo-pi.cpp)
+add_executable(monte-carlo-pi-2 monte-carlo-pi-2.cpp)
 add_executable(normalize normalize.cpp)
 add_executable(broadcast broadcast.cpp)
